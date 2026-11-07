@@ -16,7 +16,8 @@ import numpy as np
 # -----------------------------------------------
 
 def compute_output_size_1d(input_array, kernel_array):
-    pass
+    conv_len = len(input_array) - len(kernel_array) + 1
+    return(conv_len)
 
 
 # -----------------------------------------------
@@ -37,7 +38,18 @@ print(compute_output_size_1d(input_array, kernel_array))
 def convolve_1d(input_array, kernel_array):
     # Tip: start by initializing an empty output array (you can use your function above to calculate the correct size).
     # Then fill the cells in the array with a loop.
-    pass
+    len_input = len(input_array)
+    len_kernel = len(kernel_array)
+    output_arr = np.array([])
+
+    for i in range(len_input - len_kernel + 1):
+        res = 0
+        for j in range(len_kernel):
+            res += input_array[i + j] * kernel_array[j]
+
+        output_arr = np.append(output_arr, res)
+    
+    return(output_arr)
 
 # -----------------------------------------------
 # Another tip: write test cases like this, so you can easily test your function.
@@ -56,7 +68,15 @@ print(convolve_1d(input_array, kernel_array))
 # -----------------------------------------------
 
 def compute_output_size_2d(input_matrix, kernel_matrix):
-    pass
+    in_het = input_matrix.shape[0]
+    in_wid = input_matrix.shape[1]
+    ker_het = kernel_matrix.shape[0]
+    ker_wid = kernel_matrix.shape[1]
+
+    res_het = in_het - ker_het + 1
+    res_wid = in_wid - ker_wid + 1
+
+    return(res_het, res_wid)
 
 
 # -----------------------------------------------
@@ -72,7 +92,18 @@ def compute_output_size_2d(input_matrix, kernel_matrix):
 def convolute_2d(input_matrix, kernel_matrix):
     # Tip: same tips as above, but you might need a nested loop here in order to
     # define which parts of the input matrix need to be multiplied with the kernel matrix.
-    pass
+    res_het, res_wid = compute_output_size_2d(input_matrix, kernel_matrix)
+    ker_het, ker_wid = kernel_matrix.shape
+    res = np.zeros((res_het, res_wid))
+
+    for i in range(res_het):
+        for j in range(res_wid):
+            input_map = input_matrix[i:i+ker_het, j:j+ker_wid]
+            output_map = np.sum(input_map * kernel_matrix)
+            res[i, j] = output_map
+    
+    return(res)
+
 
 
 # -----------------------------------------------
